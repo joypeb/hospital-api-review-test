@@ -10,7 +10,10 @@ import com.jpa.hospital.repository.ReviewRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -46,5 +49,18 @@ public class ReviewService {
         Review review = reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 id가 없습니다"));
         log.info("리뷰 데이터 : " + review.toString());
         return review;
+    }
+
+    public List<ReviewReadResponse> findAllByHospitalId(Long hospitalId) {
+        List<ReviewReadResponse> reviews = reviewRepository.findByHospitalId(hospitalId).stream().map(
+                review -> ReviewReadResponse.builder()
+                        .id(review.getId())
+                        .title(review.getTitle())
+                        .content(review.getContent())
+                        .patientName(review.getPatientName())
+                        .hospitalName(review.getHospital().getHospitalName())
+                        .build()
+        ).collect(Collectors.toList());
+        return reviews;
     }
 }
