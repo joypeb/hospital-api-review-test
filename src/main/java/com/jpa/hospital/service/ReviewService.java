@@ -4,6 +4,7 @@ import com.jpa.hospital.domain.Hospital;
 import com.jpa.hospital.domain.Review;
 import com.jpa.hospital.domain.dto.ReviewCreateRequest;
 import com.jpa.hospital.domain.dto.ReviewCreateResponse;
+import com.jpa.hospital.domain.dto.ReviewReadResponse;
 import com.jpa.hospital.repository.HospitalRepository;
 import com.jpa.hospital.repository.ReviewRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,7 @@ public class ReviewService {
 
     public Review getReview(Long id) {
         Review review = reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 id가 없습니다"));
+        log.info("리뷰 데이터 : " + review.toString());
         return review;
     }
 }

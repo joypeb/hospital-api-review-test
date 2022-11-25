@@ -1,6 +1,7 @@
 package com.jpa.hospital.controller;
 
 import com.jpa.hospital.domain.Review;
+import com.jpa.hospital.domain.dto.ReviewReadResponse;
 import com.jpa.hospital.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +20,16 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Review> get(@PathVariable Long id) {
+    public ResponseEntity<ReviewReadResponse> get(@PathVariable Long id) {
         Review review = reviewService.getReview(id);
-        return ResponseEntity.ok().body(review);
+        ReviewReadResponse response = ReviewReadResponse.builder()
+                .id(review.getId())
+                .title(review.getTitle())
+                .content(review.getContent())
+                .patientName(review.getPatientName())
+                .hospitalName(review.getHospital().getHospitalName())
+                .build();
+        log.info("리뷰 데이터 컨트롤러 : " + review.toString());
+        return ResponseEntity.ok().body(response);
     }
 }
